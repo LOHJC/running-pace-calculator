@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 // import FormHelperText from '@mui/material/FormHelperText';
@@ -25,17 +25,18 @@ export const NumberEditbox = (props) => {
     // -1 = empty
     // 0 = invalid
     // 1 = valid
-    const [valid,setValid] = useState(2);
+    const [valid,setValid] = useState(-1);
 
     function checkValidity(event)
     {
+        let validity = -1;
         if (event.target.value==="")
         {
-            setValid(-1);
+            validity = -1
         }
         else if (isNaN(event.target.value))
         {
-            setValid(0);
+            validity = 0
         }
         else
         {
@@ -43,18 +44,29 @@ export const NumberEditbox = (props) => {
             {
                 if (Number.isInteger(parseFloat(event.target.value)))
                 {
-                    setValid(1);
+                    validity = 1;
                 }
                 else
                 {
-                    setValid(0);
+                    validity = 0
                 }
             }
             else
             {
-                setValid(1);
+                validity = 1;
             }
         }
+
+        if (validity===1)
+        {
+            props.setValue(event.target.value);
+        }
+        else
+        {
+            props.setValue(0);
+        }
+        
+        setValid(validity);
     }
 
     function decideHelperText()
@@ -98,7 +110,6 @@ export const NumberEditbox = (props) => {
         helperText={decideHelperText()}
         >
         </TextField>
-
         // <FormControl fullWidth margin="normal" variant="outlined">
         //     <InputLabel>{props.label}</InputLabel>
         //     <Input endAdornment={<InputAdornment position="end">{props.unit}</InputAdornment>}/>

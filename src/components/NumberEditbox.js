@@ -59,7 +59,10 @@ export const NumberEditbox = (props) => {
 
         if (validity===1)
         {
-            props.setValue(event.target.value);
+            if (props.checkInt)
+                props.setValue(parseInt(event.target.value));
+            else
+                props.setValue(parseFloat(event.target.value));
         }
         else
         {
@@ -98,7 +101,7 @@ export const NumberEditbox = (props) => {
     }
 
     return (
-        <TextField fullWidth label={props.label} variant="outlined" margin="normal"
+        <TextField fullWidth type='number' label={props.label} variant="outlined" margin="normal"
         InputProps={{
             endAdornment: <InputAdornment position="end">{props.unit}</InputAdornment>,
         }}

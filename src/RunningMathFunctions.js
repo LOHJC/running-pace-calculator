@@ -1,6 +1,29 @@
 
+function AveragePace(total_distance, time_hour, time_min)
+{
+    //console.log(total_distance,time_hour,time_min);
+    //console.log(typeof(total_distance),typeof (time_hour),typeof(time_min));
+    if (total_distance===0 || (time_hour===0 && time_min===0) )
+        return "";
+    let total_time_min = parseInt(time_hour*60)+parseInt(time_min);
+    let avg_pace = total_time_min/total_distance;
+    //console.log(FormatPace(avg_pace));
+    return FormatPace(avg_pace);
+}
 
-export default function LinearlySlower(total_distance, time_hour, time_min, gradient_scale)
+function FormatPace(total_time_min)
+{
+    let time_min = parseInt(total_time_min);
+    let time_sec = -1;
+    if (time_min===0)
+        time_sec = parseInt(total_time_min*60);
+    else
+        time_sec = parseInt(total_time_min%time_min*60);
+    time_sec = time_sec.toString().length===1?"0"+time_sec.toString():time_sec;
+    return `${time_min}'${time_sec}"`;
+}
+
+function RunLinearly(total_distance, time_hour, time_min, gradient_scale)
 {
     let data_array = []
 
@@ -69,7 +92,7 @@ export default function LinearlySlower(total_distance, time_hour, time_min, grad
         sec_time  = ((left_dist*avg_pace_min)-min_time)*60;
         let data = {
             "id": i+1,
-            "dist_km": parseFloat(left_dist).toFixed(3),
+            "dist_km": Math.round(left_dist * 1000) / 1000, //parseFloat(left_dist).toFixed(3),
             "time_min": parseInt(min_time),
             "time_sec": parseInt(sec_time)
         }
@@ -78,3 +101,5 @@ export default function LinearlySlower(total_distance, time_hour, time_min, grad
     //console.log(`total time in min: ${total_time_min_calculated}`);
     return data_array;
 }
+
+export { AveragePace, RunLinearly, FormatPace}

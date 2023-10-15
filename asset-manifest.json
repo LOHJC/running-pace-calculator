@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/running-pace-planner/static/css/main.982e645b.css",
-    "main.js": "/running-pace-planner/static/js/main.1d274486.js",
+    "main.js": "/running-pace-planner/static/js/main.783a96b6.js",
     "static/js/787.9c1d5594.chunk.js": "/running-pace-planner/static/js/787.9c1d5594.chunk.js",
     "index.html": "/running-pace-planner/index.html",
     "main.982e645b.css.map": "/running-pace-planner/static/css/main.982e645b.css.map",
-    "main.1d274486.js.map": "/running-pace-planner/static/js/main.1d274486.js.map",
+    "main.783a96b6.js.map": "/running-pace-planner/static/js/main.783a96b6.js.map",
     "787.9c1d5594.chunk.js.map": "/running-pace-planner/static/js/787.9c1d5594.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.982e645b.css",
-    "static/js/main.1d274486.js"
+    "static/js/main.783a96b6.js"
   ]
 }

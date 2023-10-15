@@ -1,11 +1,10 @@
 import React from 'react'
-import { Grid, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 //import { Typography } from '@mui/material'
 import { AveragePace, FormatPace, RunLinearly } from '../RunningMathFunctions'
 //import { BarChart } from '@mui/x-charts/BarChart';
-import { axisClasses } from '@mui/x-charts';
+//import { axisClasses } from '@mui/x-charts';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, LabelList} from 'recharts';
-import { useTheme } from '@mui/material/styles';
 
 export const RunningPaceGraph = (props) => {
 
@@ -13,7 +12,46 @@ export const RunningPaceGraph = (props) => {
     let average_pace = AveragePace(props.distance,props.timeHour,props.timeMin);
     let dataset=[];
     let fulldataset = [];
-    const theme = useTheme();
+    const [orientation,setOrientation]  =React.useState("");
+    const [aspectRatio,setAspectRatio] = React.useState(1);
+    React.useEffect(()=>{
+        function handleResize()
+        {
+            let window_orientation = window.screen.orientation.type.includes("portrait")?"portrait":"landscape";
+            //console.log("window_orientation",window_orientation);
+            //console.log("orientation",orientation);
+            if (orientation==="")
+            {
+                setOrientation(window_orientation);
+            }
+            else if (window_orientation !== orientation)
+            {
+                setOrientation(window_orientation);
+            }
+        }
+        
+        window.addEventListener("resize",handleResize)
+
+        return _ => {
+            window.removeEventListener("resize", handleResize)
+          
+      }
+    });
+    React.useEffect(()=>{
+        if (orientation==="portrait")
+        {
+            setAspectRatio(0.9);
+        }
+        else if (orientation==="landscape")
+        {
+            setAspectRatio(2);
+        }
+        else
+        {
+            setAspectRatio(1);
+        }
+    },[orientation]);
+
     data_array.map((data)=>(
         //based on the dataset amount see if it changes to another set
         dataset.push({
@@ -22,17 +60,17 @@ export const RunningPaceGraph = (props) => {
         })
     ))
 
-    let valueFormatter = (value) => `${value}km`;
+    // let valueFormatter = (value) => `${value}km`;
 
-    const chartSetting = {
-        yAxis: [
-          {
-            label: "Time (min)",
-          },
-        ],
-        width: 600,
-        height: 500,
-    };
+    // const chartSetting = {
+    //     yAxis: [
+    //       {
+    //         label: "Time (min)",
+    //       },
+    //     ],
+    //     width: 600,
+    //     height: 500,
+    // };
     
     //Rearrange the data
     if (data_array.length)
@@ -83,7 +121,7 @@ export const RunningPaceGraph = (props) => {
 
     function showAveragePace()
     {
-        if (average_pace!="")
+        if (average_pace!=="")
             return <Typography>Average Pace: {average_pace}</Typography>
         else
             return <Typography></Typography>
@@ -93,19 +131,19 @@ export const RunningPaceGraph = (props) => {
     {
         if (data.length)
         {
-            //console.log(theme.palette.primary);
+            //console.log(props.theme.palette.primary);
             return (
-                <ResponsiveContainer key={key} width="100%" aspect="1">
+                <ResponsiveContainer key={key} width="90%" aspect={aspectRatio}>
                     <BarChart data={data} margin={{top:10, left: 10, right:10, bottom: 10}}>
                         <XAxis label={{ value: 'Distance (km)', position: 'insideBottom', dy:10}} dataKey="km" />
                         <YAxis domain={[0,defineYRangeMax(data)]} label={{ value: 'Pace', angle: -90, position: 'insideLeft', dx:10}}/>
-                        <Tooltip content={<CustomTooltip />} wrapperStyle={{background:"white", padding: "1%", border:`1px solid ${theme.palette.primary.light}`, borderRadius:5}}/>
+                        <Tooltip content={<CustomTooltip />} wrapperStyle={{background:"white", padding: "1%", border:`1px solid ${props.theme.palette.primary.light}`, borderRadius:5}}/>
                         {/* <Tooltip /> */}
                         <Legend verticalAlign="top" formatter={(value, entry, index) => {
                             return <span style={{ color: "black" }}>{value}</span>;
                             }} />
                         {/* <Legend /> */}
-                        <Bar dataKey="time" fill={theme.palette.primary.main}>
+                        <Bar dataKey="time" fill={props.theme.palette.primary.main}>
                             <LabelList dataKey="time" position="top" angle="45" formatter={(value)=>{
                                 return FormatPace(value);
                             }}/>
@@ -134,12 +172,13 @@ export const RunningPaceGraph = (props) => {
         //     }
         // </Grid>
 
-        <Grid item xs={props.xs} sm={props.sm} md={props.md} lg={props.lg} xl={props.xs.xl}>
+        <Box width={"90%"}
+            sx={{margin:"5%"}}>
             {showAveragePace()}
             {fulldataset.map((data)=>(
                 showChart(data.dataset,data.id)
             ))}
-        </Grid>
+        </Box>
     )
 
 

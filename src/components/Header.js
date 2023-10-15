@@ -1,9 +1,11 @@
 import React from 'react'
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
+import { AppBar } from '@mui/material';
 
 export const Header = (props) => {
   return (
-        <Typography variant="h5" align="center">{props.title}</Typography>
-  )
+    <AppBar position='static'>
+      <Typography padding="1%" variant="h5" align="center">{props.title}</Typography>
+    </AppBar>
+    )
 }

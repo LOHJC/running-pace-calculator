@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
+//import { Grid } from '@mui/material';
 // import FormHelperText from '@mui/material/FormHelperText';
 // import FormControl, { useFormControl } from '@mui/material/FormControl';
 // import Input from '@mui/material/Input';
@@ -26,17 +27,58 @@ export const NumberEditbox = (props) => {
     // 0 = invalid
     // 1 = valid
     const [valid,setValid] = useState(-1);
+    const [helperText,setHelperText] = useState("");
+    const [editBoxValue,setEditBoxValue] = useState("");
+
+    useEffect(()=>{       
+
+        function decideHelperText()
+        {
+            if (valid===0)
+            {
+                setHelperText(props.errorMessage);
+            }
+            else if (valid===1)
+            {
+                setHelperText(props.successMessage);
+            }
+            else
+            {
+                setHelperText(props.defaultMessage);   
+            }
+        }
+        
+        //set the helper text
+        decideHelperText();
+        //set the edit box value
+        if (valid===1)
+        {
+            if (props.checkInt)
+                props.setValue(parseInt(editBoxValue));
+            else
+                props.setValue(parseFloat(editBoxValue));
+        }
+        else
+        {
+            props.setValue(0);
+        }
+        // console.log("validity in useEffect",valid);
+        // console.log("editBoxValue",editBoxValue);
+        
+    },[valid, editBoxValue, props]);
+
+
 
     function checkValidity(event)
     {
-        let validity = -1;
+        setEditBoxValue(event.target.value);
         if (event.target.value==="")
         {
-            validity = -1
+            setValid(-1)
         }
         else if (isNaN(event.target.value))
         {
-            validity = 0
+            setValid(0)
         }
         else
         {
@@ -44,46 +86,19 @@ export const NumberEditbox = (props) => {
             {
                 if (Number.isInteger(parseFloat(event.target.value)))
                 {
-                    validity = 1;
+                    setValid(1);
                 }
                 else
                 {
-                    validity = 0
+                    setValid(0);
                 }
             }
             else
             {
-                validity = 1;
+                setValid(1);
             }
         }
-
-        if (validity===1)
-        {
-            if (props.checkInt)
-                props.setValue(parseInt(event.target.value));
-            else
-                props.setValue(parseFloat(event.target.value));
-        }
-        else
-        {
-            props.setValue(0);
-        }
         
-        setValid(validity);
-    }
-
-    function decideHelperText()
-    {
-        if (valid===0)
-        {
-            return props.errorMessage;
-        }
-        else if (valid===1)
-        {
-            return props.successMessage;
-        }
-
-        return props.defaultMessage;
     }
 
     function decideColor()
@@ -101,16 +116,16 @@ export const NumberEditbox = (props) => {
     }
 
     return (
-        <TextField fullWidth type='number' label={props.label} variant="outlined" margin="normal"
+        <TextField fullWidth label={props.label} variant="outlined" margin="normal"
         InputProps={{
             endAdornment: <InputAdornment position="end">{props.unit}</InputAdornment>,
         }}
         error={!valid}
         color={decideColor()}
         onFocus={checkValidity}
-        onBlur={checkValidity}
+        //onBlur={checkValidity}
         onChange={checkValidity}
-        helperText={decideHelperText()}
+        helperText={helperText}
         >
         </TextField>
         // <FormControl fullWidth margin="normal" variant="outlined">

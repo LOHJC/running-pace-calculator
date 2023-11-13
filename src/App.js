@@ -44,7 +44,7 @@ function App() {
         </Box>
         
         <Box align="center">
-          <Slider sx={{width:"75%"}} valueLabelDisplay="auto" size="small" min={0.2} max={1} step={0.01} onChange={(e)=>{setGradientScale(e.target.value);}}/>
+          <Slider sx={{width:"75%"}} size="small" min={0.2} max={1} step={0.01} onChange={(e)=>{setGradientScale(e.target.value);}}/>
           <RunningPaceGraph distance={distance} timeHour={hour} timeMin={min} gradientScale={gradient_scale} theme={theme}/>
         </Box>
       </Container>

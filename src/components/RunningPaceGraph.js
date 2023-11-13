@@ -14,17 +14,21 @@ export const RunningPaceGraph = (props) => {
     let fulldataset = [];
     const [orientation,setOrientation]  =React.useState("");
     const [aspectRatio,setAspectRatio] = React.useState(1);
+
+    //set the orientation initially
+    React.useEffect(()=>{        
+        let window_orientation = window.screen.orientation.type.includes("portrait")?"portrait":"landscape";
+        setOrientation(window_orientation)
+    },[])
+
     React.useEffect(()=>{
         function handleResize()
         {
             let window_orientation = window.screen.orientation.type.includes("portrait")?"portrait":"landscape";
+            console.log(window_orientation);
             //console.log("window_orientation",window_orientation);
             //console.log("orientation",orientation);
-            if (orientation==="")
-            {
-                setOrientation(window_orientation);
-            }
-            else if (window_orientation !== orientation)
+            if (orientation==="" || window_orientation !== orientation)
             {
                 setOrientation(window_orientation);
             }
